@@ -20,7 +20,6 @@
     <li><a href="ujedzes.php">Új edzés</a></li>
     <li><a href="kozosseg.php">Közösség</a></li>
     <li><a href="statisztikak.php">Statisztikák</a></li>
-    <li><a href="profil.php">Kalória kalkulátor</a></li>
     <li><a href="profil.php">Profil</a></li>
     <li class="menu-icon-li"><img src="../img/menu.png" id="menuBtn" class="menu-icon"></li>
 </ul>
@@ -30,7 +29,7 @@
 
     <!-- ADATOK -->
     <div class="profil-card profil-adatok">
-        <h2>👤 Adatok</h2>
+        <h2>Adatok</h2>
         <p><b>Név:</b></p>
         <p><b>E-mail:</b></p>
         <p><b>Regisztráció:</b></p>
@@ -38,7 +37,7 @@
 
     <!-- STATISZTIKÁK -->
     <div class="profil-card">
-        <h2>📊 Statisztikák</h2>
+        <h2>Statisztikák</h2>
         <div class="stat-grid">
             <div class="stat-box">
                 <h3>128</h3>
@@ -57,7 +56,7 @@
 
     <!-- BARÁTOK -->
     <div class="profil-card profil-full">
-        <h2>👥 Barátok</h2>
+        <h2>Barátok</h2>
 
         <div class="barat">
             <span></span>
@@ -73,6 +72,13 @@
             <span></span>
             <button>Profil</button>
         </div>
+    </div>
+
+    <div class="kaloria-card">
+        <h2>Kalória kalkulátor</h2>
+        <p><b>Név:</b></p>
+        <p><b>E-mail:</b></p>
+        <p><b>Regisztráció:</b></p>
     </div>
 
 </div>

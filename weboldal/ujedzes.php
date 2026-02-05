@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="../css/ujedzes.css">
     <link rel="icon" type="image/x-icon" href="../img/gymlog-white.png">
     <script src="../js/index.js" defer></script>
+    <script src="../js/ujedzes.js" defer></script>
     
     <title>Új edzés</title>
 </head>
@@ -24,52 +25,52 @@
         <li><a href="ujedzes.php">Új edzés</a></li>
         <li><a href="kozosseg.php">Közösség</a></li>
         <li><a href="statisztikak.php">Statisztikák</a></li>
-        <li><a href="profil.php">Kalória kalkulátor</a></li>
         <li><a href="profil.php">Profil</a></li>
         <li class="menu-icon-li"><img src="../img/menu.png" id="menuBtn" class="menu-icon" alt="menu"></li>
             
         <!-- <img src="img/menu.png" class="menu-icon" alt="menu"> -->
     </ul>
     <!-- <h1 style="text-align: center;">Új edzés<br> gombra kattintottál!</h1> -->
-
+    
     <div class="loginDiv">
-        <h1 >Új Edzés</h1>
-        <h2>Edzés név:</h2>
-        <input type="text" class="inputok" >
-        <h2>Izom csoport:</h2>
-        <input type="text" class="inputok">
-        <h2>Ismétlések száma:</h2>
-        <input class="inputok2"
-            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            type = "number"
-            maxlength = "2"
-        />
-        <h2>Egy ismétlés száma:</h2>
-        <input class="inputok2"
-            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            type = "number"
-            maxlength = "2"
-        />
-        <!-- <ul>
-            <input type="checkbox">
-            <label for="">Hétfő</label>
-            <input type="checkbox">
-            <label for="">Kedd</label>
-            <input type="checkbox">
-            <label for="">Szerda</label>
-            <input type="checkbox">
-            <label for="">Csütörtök</label>
-            <input type="checkbox">
-            <label for="">Péntek</label>
-            <input type="checkbox">
-            <label for="">Szombat</label>
-            <input type="checkbox">
-            <label for="">Vasárnap</label>
-        </ul> -->
-        <button id = "mentes">Edzés mentése</button>
-        <br>
-        <br>
+        <h1>Új edzés</h1>
+
+        <p class="leiras">Adj nevet az edzésnek, válassz gyakorlatokat a jobb oldali listából, és állítsd be a szetteket / ismétléseket.</p>
+
+        <p class="mezocim">Edzés neve</p>
+        <input type="text" id="edzesNev" class="inputok" placeholder="pl. Felsőtest edzés">
+
+        <div class="edzes-meta">
+            <span id="gyakorlatCount">0 gyakorlat</span>
+        </div>
+
+        <div id="valasztottGyakorlatok" class="gyakorlat-lista">
+            <p class="ures-info">Még nem adtál hozzá gyakorlatot.</p>
+        </div>
+
+        <button type="button" id="ujGyakorlatGomb">Gyakorlat hozzáadása</button>
+
+        <button type="button" id="mentes" class="mentes-gomb">Edzés mentése</button>
+
         <p id="hiba"></p>
+    </div>
+
+    <div class="gyakorlat-panel" id="gyakorlatPanel">
+        <div class="gyakorlat-panel-fejlec">
+            <h2>Gyakorlat választó</h2>
+            <button type="button" id="panelZar" class="panel-zar">✕</button>
+        </div>
+
+        <input type="text" id="gyakorlatKereses" class="gyakorlat-kereses" placeholder="Keresés a gyakorlatok között...">
+
+        <div class="gyakorlat-panel-lista" id="gyakorlatListaOldal">
+            <button type="button" class="gyakorlat-item" data-nev="Fekvenyomás">Fekvenyomás (mell)</button>
+            <button type="button" class="gyakorlat-item" data-nev="Guggolás">Guggolás (láb)</button>
+            <button type="button" class="gyakorlat-item" data-nev="Felhúzás">Felhúzás (hát)</button>
+            <button type="button" class="gyakorlat-item" data-nev="Vállból nyomás">Vállból nyomás (váll)</button>
+            <button type="button" class="gyakorlat-item" data-nev="Bicepsz hajlítás">Bicepsz hajlítás</button>
+            <button type="button" class="gyakorlat-item" data-nev="Tricepsz letolás">Tricepsz letolás</button>
+        </div>
     </div>
 </body>
 </html>

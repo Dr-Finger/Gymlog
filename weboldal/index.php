@@ -9,26 +9,39 @@
 
     <title>Bejelentkezés</title>
 </head>
-<body>
+<body class="fooldal-body">
     <ul>
         <li><a class="home-btn-a" href="index.php"><img class="home-btn" src="../img/gymlog-white-removebg.png"></a></li>
+        <li><a href="index.php">Főoldal</a></li>
         <li><a href="ujedzes.php">Új edzés</a></li>
         <li><a href="kozosseg.php">Közösség</a></li>
         <li><a href="statisztikak.php">Statisztikák</a></li>
-        <li><a href="profil.php">Kalória kalkulátor</a></li>
         <li><a href="profil.php">Profil</a></li>
-        <li class="menu-icon-li"><img src="../img/menu.png" id="menuBtn" class="menu-icon" alt="menu"></li>
-        
-        <!-- <img src="img/menu.png" class="menu-icon" alt="menu"> -->
+
+        <li class="nav-spacer"></li>
+
+        <li class="nav-role">Szerep: Felhasználó</li>
+        <li><a href="login-html.php">Kijelentkezés</a></li>
     </ul>
-    
 
-    <h1 style="text-align: center;">Bejelentkezés<br> gombra kattintottál!</h1>
+    <main class="main-shell">
+        <div class="outer-box">
+            <section class="posts-box">
+                <h1>Bejegyzések</h1>
+                <p class="posts-placeholder">
+                    Itt fognak megjelenni a barátaid és a saját posztjaid.
+                </p>
+            </section>
 
-    <!-- ezt a kettőt későbbiekben töröljük csak szemléltetés miatt van itt -->
-    <h2 class="alatt" style="text-align: center;"><br>700px alatt!</h2>
-    <h2 class="felett" style="text-align: center;"><br>700px felett!</h2>
-
+            <aside class="friends-box">
+                <h2>Barátok listája</h2>
+                <p class="friends-info">
+                    Itt jelenjen meg azoknak a neve, akiket barátnak jelöltél.
+                    Csak egy egyszerű lista, nem kell online / offline jelzés.
+                </p>
+            </aside>
+        </div>
+    </main>
 
 </body>
 </html>
