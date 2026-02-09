@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "db.php";
+require "functions.php";
 
 if (!isset($_SESSION["user_id"])) {
     header("Location: login-html.php");
@@ -8,22 +9,7 @@ if (!isset($_SESSION["user_id"])) {
 }
 
 $userId = (int)$_SESSION["user_id"];
-
-$tervek = [];
-
-// Ha a tábla még nem létezik, egyszerűen üres listát mutatunk
-$check = $conn->query("SHOW TABLES LIKE 'edzesterv_mentes'");
-if ($check && $check->num_rows > 0) {
-    $stmt = $conn->prepare("SELECT id, nev, tartalom, letrehozva FROM edzesterv_mentes WHERE felhasznaloId = ? ORDER BY letrehozva DESC");
-    if ($stmt) {
-        $stmt->bind_param("i", $userId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {
-            $tervek[] = $row;
-        }
-    }
-}
+$tervek = getTervek($conn, $userId);
 ?>
 <!DOCTYPE html>
 <html lang="hu">
@@ -36,20 +22,7 @@ if ($check && $check->num_rows > 0) {
     <title>Edzéstervek</title>
 </head>
 <body class="fooldal-body">
-    <ul>
-        <li><a class="home-btn-a" href="index.php"><img class="home-btn" src="../img/gymlog-white-removebg.png"></a></li>
-        <li><a href="index.php">Főoldal</a></li>
-        <li><a href="ujedzes.php">Új edzés</a></li>
-        <li><a href="edzestervek.php">Edzéstervek</a></li>
-        <li><a href="kozosseg.php">Közösség</a></li>
-        <li><a href="statisztikak.php">Statisztikák</a></li>
-        <li><a href="profil.php">Profil</a></li>
-
-        <li class="nav-spacer"></li>
-
-        <li class="nav-role">Szerep: Felhasználó</li>
-        <li><a href="login-html.php">Kijelentkezés</a></li>
-    </ul>
+    <?php include "nav.php"; ?>
 
     <main class="main-shell">
         <div class="outer-box">
@@ -74,18 +47,9 @@ if ($check && $check->num_rows > 0) {
                                 <ul class="terv-gyakorlatok">
                                     <?php foreach ($sorok as $sor): ?>
                                         <li>
-                                            <?php echo htmlspecialchars($sor["nev"] ?? ""); ?>
-                                            <?php
-                                                $set  = isset($sor["set"]) ? (int)$sor["set"] : 0;
-                                                $rep  = isset($sor["rep"]) ? (int)$sor["rep"] : 0;
-                                                $suly = isset($sor["suly"]) ? (int)$sor["suly"] : 0;
-                                                $reszletek = [];
-                                                if ($set > 0)  $reszletek[] = $set . "x";
-                                                if ($rep > 0)  $reszletek[] = $rep . " ismétlés";
-                                                if ($suly > 0) $reszletek[] = $suly . " kg";
-                                                if (!empty($reszletek)) {
-                                                    echo " – " . htmlspecialchars(implode(", ", $reszletek));
-                                                }
+                                            <?php 
+                                                echo htmlspecialchars($sor["nev"] ?? "");
+                                                echo htmlspecialchars(formatGyakorlatReszletek($sor));
                                             ?>
                                         </li>
                                     <?php endforeach; ?>

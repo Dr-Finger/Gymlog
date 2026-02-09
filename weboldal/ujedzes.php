@@ -1,33 +1,19 @@
 <?php
 session_start();
 require "db.php";
+require "functions.php";
 
 $tervAdatok = null;
 if (isset($_GET["terv_id"]) && is_numeric($_GET["terv_id"])) {
     $tervId = (int)$_GET["terv_id"];
     $userId = isset($_SESSION["user_id"]) ? (int)$_SESSION["user_id"] : 0;
-    
     if ($userId > 0) {
-        $check = $conn->query("SHOW TABLES LIKE 'edzesterv_mentes'");
-        if ($check && $check->num_rows > 0) {
-            $stmt = $conn->prepare("SELECT nev, tartalom FROM edzesterv_mentes WHERE id = ? AND felhasznaloId = ?");
-            if ($stmt) {
-                $stmt->bind_param("ii", $tervId, $userId);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                if ($row = $result->fetch_assoc()) {
-                    $tervAdatok = [
-                        "nev" => $row["nev"],
-                        "tartalom" => json_decode($row["tartalom"], true) ?: []
-                    ];
-                }
-            }
-        }
+        $tervAdatok = getTervAdatok($conn, $tervId, $userId);
     }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,33 +27,10 @@ if (isset($_GET["terv_id"]) && is_numeric($_GET["terv_id"])) {
         window.tervAdatok = <?php echo json_encode($tervAdatok, JSON_UNESCAPED_UNICODE); ?>;
     </script>
     <?php endif; ?>
-    
     <title>Új edzés</title>
 </head>
 <body class="fooldal-body">
-    <style>
-        body{    
-            background-image: url(../img/moonlit-asteroid.jpg);
-            background-attachment: fixed;  
-            background-size: cover;
-            color: white;
-        }
-    </style>
-    <ul>
-        <li><a class="home-btn-a" href="index.php"><img class="home-btn" src="../img/gymlog-white-removebg.png"></a></li>
-        <li><a href="index.php">Főoldal</a></li>
-        <li><a href="ujedzes.php">Új edzés</a></li>
-        <li><a href="edzestervek.php">Edzéstervek</a></li>
-        <li><a href="kozosseg.php">Közösség</a></li>
-        <li><a href="statisztikak.php">Statisztikák</a></li>
-        <li><a href="profil.php">Profil</a></li>
-
-        <li class="nav-spacer"></li>
-
-        <li class="nav-role">Szerep: Felhasználó</li>
-        <li><a href="login-html.php">Kijelentkezés</a></li>
-    </ul>
-    <!-- <h1 style="text-align: center;">Új edzés<br> gombra kattintottál!</h1> -->
+    <?php include "nav.php"; ?>
     
     <div class="loginDiv">
         <h1>Új edzés</h1>
