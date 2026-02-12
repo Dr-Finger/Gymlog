@@ -265,26 +265,35 @@ function getProfilStat($conn, $userId, $tipus) {
     return 0;
 }
 
-function getProfilEdzesek($conn, $userId, $limit = 50) {
+function getProfilEdzesek($conn, $userId, $limit = 50, $honapYm = null) {
     $edzesek = [];
     $check = $conn->query("SHOW TABLES LIKE 'edzes'");
     if (!$check || $check->num_rows === 0) return $edzesek;
-    $stmt = $conn->prepare("SELECT id, nev, datum, idotartam, osszsuly FROM edzes WHERE felhasznaloId = ? ORDER BY datum DESC, id DESC LIMIT ?");
-    if (!$stmt) return $edzesek;
-    $l = (int)$limit;
-    $stmt->bind_param("ii", $userId, $l);
+    if ($honapYm) {
+        $honapStart = $honapYm . "-01";
+        $honapEnd = $honapYm . "-" . date("t", strtotime($honapStart . " 12:00:00"));
+        $stmt = $conn->prepare("SELECT id, nev, datum, idotartam, osszsuly FROM edzes WHERE felhasznaloId = ? AND datum >= ? AND datum <= ? ORDER BY datum DESC, id DESC");
+        if (!$stmt) return $edzesek;
+        $stmt->bind_param("iss", $userId, $honapStart, $honapEnd);
+    } else {
+        $stmt = $conn->prepare("SELECT id, nev, datum, idotartam, osszsuly FROM edzes WHERE felhasznaloId = ? ORDER BY datum DESC, id DESC LIMIT ?");
+        if (!$stmt) return $edzesek;
+        $l = (int)$limit;
+        $stmt->bind_param("ii", $userId, $l);
+    }
     $stmt->execute();
     $res = $stmt->get_result();
     while ($row = $res->fetch_assoc()) $edzesek[] = $row;
     return $edzesek;
 }
 
-function getEdzesNapokHonap($conn, $userId) {
+function getEdzesNapokHonap($conn, $userId, $honapYm = null) {
     $napok = [];
     $check = $conn->query("SHOW TABLES LIKE 'edzes'");
     if (!$check || $check->num_rows === 0) return $napok;
-    $honapStart = date("Y-m-01", strtotime("-1 month"));
-    $honapEnd = date("Y-m-t", strtotime("-1 month"));
+    if (!$honapYm) $honapYm = date("Y-m", strtotime("-1 month"));
+    $honapStart = $honapYm . "-01";
+    $honapEnd = $honapYm . "-" . date("t", strtotime($honapStart . " 12:00:00"));
     $stmt = $conn->prepare("SELECT DISTINCT DATE(datum) as nap FROM edzes WHERE felhasznaloId = ? AND datum >= ? AND datum <= ?");
     if (!$stmt) return $napok;
     $stmt->bind_param("iss", $userId, $honapStart, $honapEnd);
@@ -300,9 +309,10 @@ function formatGyakorlatReszletek($sor) {
         foreach ($sor["szettek"] as $i => $sz) {
             $rep = (int)($sz["rep"] ?? 0);
             $suly = (int)($sz["suly"] ?? 0);
+            $kesz = !empty($sz["kesz"]);
             $txt = $rep > 0 ? $rep . " ismétlés" : "";
             if ($suly > 0) $txt .= ($txt ? " / " : "") . $suly . " kg";
-            if ($txt) $reszletek[] = ($i + 1) . ". " . $txt;
+            if ($txt) $reszletek[] = ($i + 1) . ". " . ($kesz ? "✓ " : "") . $txt;
         }
         return !empty($reszletek) ? " – " . implode(", ", $reszletek) : "";
     }

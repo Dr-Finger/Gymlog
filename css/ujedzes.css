@@ -215,10 +215,52 @@
 }
 
 .szet-sor {
-    display: grid;
-    grid-template-columns: 28px auto auto 28px;
-    gap: 10px;
+    display: flex;
+    flex-wrap: nowrap;
     align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+}
+
+.szet-sor .szet-pipa { flex-shrink: 0; }
+.szet-sor .szet-cimke { flex-shrink: 0; width: 20px; text-align: right; }
+.szet-sor .szet-mezo { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
+.szet-sor .szet-cimke-mezo { flex-shrink: 0; font-size: 12px; opacity: 0.9; }
+.szet-sor .szet-torles { flex-shrink: 0; }
+
+.szet-pipa {
+    width: 18px;
+    height: 18px !important;
+    min-width: 18px;
+    min-height: 18px !important;
+    padding: 0;
+    line-height: 1;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+    color: rgba(150, 150, 150, 0.9);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.szet-pipa:hover {
+    color: rgba(180, 180, 180, 1);
+}
+
+.szet-sor.kesz .szet-pipa {
+    color: #22c55e;
+    border-color: rgba(34, 197, 94, 0.6);
+    background: rgba(34, 197, 94, 0.2);
+}
+
+.szet-sor.kesz .szet-pipa:hover {
+    background: rgba(34, 197, 94, 0.3);
 }
 
 .szet-sor .szet-cimke {
@@ -226,12 +268,8 @@
     opacity: 0.9;
 }
 
-.szet-sor label {
-    font-size: 13px;
-}
-
-.szet-sor input[type="number"] {
-    width: 50px;
+.szet-sor .szet-mezo input[type="number"] {
+    width: 56px;
     padding: 4px 8px;
     border-radius: 8px;
     border: 1px solid rgba(255,255,255,0.5);
@@ -290,16 +328,20 @@
     box-shadow: none;
 }
 
-/* sor-torles/szet-hozzaad ne örökölje a fő gomb stílusokat */
+/* sor-torles/szet-hozzaad/szet-pipa/szet-torles ne örökölje a fő gomb stílusokat */
 .gyakorlat-lista .edzes-blokk .sor-torles,
 .gyakorlat-lista .edzes-blokk .szet-hozzaad,
-.gyakorlat-lista .edzes-blokk .szet-torles {
+.gyakorlat-lista .edzes-blokk .szet-torles,
+.gyakorlat-lista .edzes-blokk .szet-pipa {
     margin-top: 0;
+    min-width: 0;
+    height: auto;
     transform: none;
 }
 .gyakorlat-lista .edzes-blokk .sor-torles:hover,
 .gyakorlat-lista .edzes-blokk .szet-hozzaad:hover,
-.gyakorlat-lista .edzes-blokk .szet-torles:hover {
+.gyakorlat-lista .edzes-blokk .szet-torles:hover,
+.gyakorlat-lista .edzes-blokk .szet-pipa:hover {
     transform: none;
 }
 
@@ -396,8 +438,8 @@
 @media (max-width: 768px) {
     .loginDiv { width: 95%; max-width: 420px; margin: 20px auto; padding: 20px; }
     .gyakorlat-panel { top: 0; width: 100%; max-width: 100%; height: 100vh; }
-    .szet-sor { grid-template-columns: 28px 1fr 1fr 28px; gap: 6px; }
-    .szet-sor input[type="number"] { width: 44px; }
+    .szet-sor { gap: 8px; }
+    .szet-sor .szet-mezo input[type="number"] { width: 48px; }
 }
 
 @media (max-width: 480px) {

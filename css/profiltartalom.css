@@ -265,7 +265,34 @@
 
 /* Naptár */
 .profil-naptar h2 { margin-top: 0; }
-.profil-naptar .naptar-honap { font-size: 14px; opacity: 0.9; margin-bottom: 10px; }
+.naptar-lapozo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.naptar-gomb {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.naptar-gomb:hover {
+    background: rgba(255,255,255,0.25);
+}
+.naptar-gomb-disabled {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+}
+.profil-naptar .naptar-honap { font-size: 14px; opacity: 0.9; margin: 0; flex: 1; }
 .naptar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);

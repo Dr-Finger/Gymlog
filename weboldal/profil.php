@@ -22,11 +22,27 @@ $edzesDb = 0;
 $baratDb = 0;
 $edzesek = [];
 $edzesNapok = [];
+$valasztottHonap = null;
+$honapNevek = ["", "január", "február", "március", "április", "május", "június", "július", "augusztus", "szeptember", "október", "november", "december"];
+
+// Honap param: YYYY-MM, max mai hónap
+$honapParam = trim($_GET["honap"] ?? "");
+if (preg_match('/^\d{4}-\d{2}$/', $honapParam)) {
+    $honapTs = strtotime($honapParam . "-01");
+    $maHonap = date("Y-m");
+    if ($honapTs && date("Y-m", $honapTs) <= $maHonap) {
+        $valasztottHonap = date("Y-m", $honapTs);
+    }
+}
+if (!$valasztottHonap) {
+    $valasztottHonap = date("Y-m", strtotime("-1 month"));
+}
+
 if ($profilUser) {
     $edzesDb = getProfilStat($conn, $profilUser["id"], "edzes");
     $baratDb = getProfilStat($conn, $profilUser["id"], "barat");
-    $edzesek = getProfilEdzesek($conn, $profilUser["id"], 100);
-    $edzesNapok = getEdzesNapokHonap($conn, $profilUser["id"]);
+    $edzesek = getProfilEdzesek($conn, $profilUser["id"], 100, $valasztottHonap);
+    $edzesNapok = getEdzesNapokHonap($conn, $profilUser["id"], $valasztottHonap);
     if ($sajatProfil && $bejelentkezve) {
         $baratok = getBaratok($conn, $userId);
     } else {
@@ -35,6 +51,19 @@ if ($profilUser) {
 }
 
 $nemSzoveg = ["ferfi" => "Férfi", "no" => "Nő", "mas" => "Egyéb"];
+
+// Lapozó URL-ek
+$urlBase = "profil.php";
+if ($megtekintettId > 0) $urlBase .= "?user_id=" . $megtekintettId;
+$urlSep = ($megtekintettId > 0) ? "&" : "?";
+$honapPrevTs = strtotime($valasztottHonap . "-01 -1 month");
+$honapNextTs = strtotime($valasztottHonap . "-01 +1 month");
+$honapPrev = date("Y-m", $honapPrevTs);
+$honapNext = date("Y-m", $honapNextTs);
+$maHonap = date("Y-m");
+$vanElozo = ($honapPrev <= $maHonap);  // elozo honap mindig van
+$vanKovetkezo = ($honapNext <= $maHonap);  // kovetkezo only if not future
+$naptarHonapSzoveg = date("Y", strtotime($valasztottHonap . "-01")) . ". " . $honapNevek[(int)date("n", strtotime($valasztottHonap . "-01"))];
 ?>
 <!DOCTYPE html>
 <html lang="hu">
@@ -128,16 +157,15 @@ $nemSzoveg = ["ferfi" => "Férfi", "no" => "Nő", "mas" => "Egyéb"];
             <button type="button" id="kaloriaKalkulatorGomb" class="kaloria-kalkulator-gomb">Kalória kalkulátor</button>
 
             <div class="profil-card profil-naptar">
-                <h2>Elmúlt hónap – edzés napjai</h2>
-                <?php
-                    $honapNevek = ["", "január", "február", "március", "április", "május", "június", "július", "augusztus", "szeptember", "október", "november", "december"];
-                    $prevMonth = strtotime("-1 month");
-                    $naptarHonap = date("Y", $prevMonth) . ". " . $honapNevek[(int)date("n", $prevMonth)];
-                    ?>
-                <p class="naptar-honap"><?php echo $naptarHonap; ?></p>
+                <h2>Edzés napjai</h2>
+                <div class="naptar-lapozo">
+                    <?php if ($vanElozo): ?><a href="<?php echo $urlBase . $urlSep . "honap=" . $honapPrev; ?>" class="naptar-gomb" title="Előző hónap">←</a><?php else: ?><span class="naptar-gomb naptar-gomb-disabled">←</span><?php endif; ?>
+                    <p class="naptar-honap"><?php echo htmlspecialchars($naptarHonapSzoveg); ?></p>
+                    <?php if ($vanKovetkezo): ?><a href="<?php echo $urlBase . $urlSep . "honap=" . $honapNext; ?>" class="naptar-gomb" title="Következő hónap">→</a><?php else: ?><span class="naptar-gomb naptar-gomb-disabled">→</span><?php endif; ?>
+                </div>
                 <div class="naptar-grid">
                     <?php
-                    $honapStartTs = strtotime("-1 month");
+                    $honapStartTs = strtotime($valasztottHonap . "-01");
                     $napokSzama = date("t", $honapStartTs);
                     for ($i = 1; $i <= $napokSzama; $i++):
                         $d = date("Y-m-d", mktime(0,0,0, (int)date("n", $honapStartTs), $i, (int)date("Y", $honapStartTs)));
@@ -151,7 +179,7 @@ $nemSzoveg = ["ferfi" => "Férfi", "no" => "Nő", "mas" => "Egyéb"];
             </div>
 
             <div class="profil-card profil-edzesek profil-edzesek-fo">
-                <h2>Edzéseim</h2>
+                <h2>Edzéseim – <?php echo htmlspecialchars($naptarHonapSzoveg); ?></h2>
                 <?php if (empty($edzesek)): ?>
                     <p class="ures-hint">Még nincs befejezett edzésed.</p>
                 <?php else: ?>
@@ -171,7 +199,7 @@ $nemSzoveg = ["ferfi" => "Férfi", "no" => "Nő", "mas" => "Egyéb"];
             <?php else: ?>
             <div class="profil-tartalom-grid">
             <div class="profil-card profil-edzesek profil-edzesek-fo">
-                <h2>Edzései</h2>
+                <h2>Edzései – <?php echo htmlspecialchars($naptarHonapSzoveg); ?></h2>
                 <?php if (empty($edzesek)): ?>
                     <p class="ures-hint">Még nincs befejezett edzése.</p>
                 <?php else: ?>
@@ -189,18 +217,18 @@ $nemSzoveg = ["ferfi" => "Férfi", "no" => "Nő", "mas" => "Egyéb"];
             </div>
             <div class="profil-mellék">
             <div class="profil-card profil-naptar">
-                <h2>Elmúlt hónap – edzés napjai</h2>
-                <?php
-                    $honapNevek = ["", "január", "február", "március", "április", "május", "június", "július", "augusztus", "szeptember", "október", "november", "december"];
-                    $prevMonthMas = strtotime("-1 month");
-                    $naptarHonapMas = date("Y", $prevMonthMas) . ". " . $honapNevek[(int)date("n", $prevMonthMas)];
-                ?>
-                <p class="naptar-honap"><?php echo $naptarHonapMas; ?></p>
+                <h2>Edzés napjai</h2>
+                <div class="naptar-lapozo">
+                    <?php if ($vanElozo): ?><a href="<?php echo $urlBase . $urlSep . "honap=" . $honapPrev; ?>" class="naptar-gomb" title="Előző hónap">←</a><?php else: ?><span class="naptar-gomb naptar-gomb-disabled">←</span><?php endif; ?>
+                    <p class="naptar-honap"><?php echo htmlspecialchars($naptarHonapSzoveg); ?></p>
+                    <?php if ($vanKovetkezo): ?><a href="<?php echo $urlBase . $urlSep . "honap=" . $honapNext; ?>" class="naptar-gomb" title="Következő hónap">→</a><?php else: ?><span class="naptar-gomb naptar-gomb-disabled">→</span><?php endif; ?>
+                </div>
                 <div class="naptar-grid">
                     <?php
-                    $napokSzamaMas = date("t", $prevMonthMas);
+                    $honapStartTsMas = strtotime($valasztottHonap . "-01");
+                    $napokSzamaMas = date("t", $honapStartTsMas);
                     for ($i = 1; $i <= $napokSzamaMas; $i++):
-                        $d = date("Y-m-d", mktime(0,0,0, (int)date("n", $prevMonthMas), $i, (int)date("Y", $prevMonthMas)));
+                        $d = date("Y-m-d", mktime(0,0,0, (int)date("n", $honapStartTsMas), $i, (int)date("Y", $honapStartTsMas)));
                         $van = in_array($d, $edzesNapok);
                     ?>
                     <div class="naptar-nap <?php echo $van ? "edzett" : ""; ?>" title="<?php echo $van ? "Edzett ezen a napon" : ""; ?>"><?php echo $i; ?></div>
