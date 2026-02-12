@@ -10,7 +10,10 @@ $roleSzoveg = [
     "admin" => "Szerep: Rendszergazda"
 ][$role];
 ?>
-<ul>
+<div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
+<nav class="main-nav">
+<button type="button" class="nav-hamburger" id="navToggle" aria-label="Menü" title="Menü">☰</button>
+<ul class="nav-menu" id="navMenu">
     <li><a class="home-btn-a" href="index.php"><img class="home-btn" src="../img/gymlog-white-removebg.png"></a></li>
     <li><a href="index.php">Főoldal</a></li>
     <li><a href="ujedzes.php">Új edzés</a></li>
@@ -26,3 +29,4 @@ $roleSzoveg = [
         <li><a href="login-html.php">Bejelentkezés</a></li>
     <?php endif; ?>
 </ul>
+</nav>

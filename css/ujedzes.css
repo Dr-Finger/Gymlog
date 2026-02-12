@@ -392,3 +392,15 @@
     margin-bottom: 6px;
     font-size: 14px;
 }
+
+@media (max-width: 768px) {
+    .loginDiv { width: 95%; max-width: 420px; margin: 20px auto; padding: 20px; }
+    .gyakorlat-panel { top: 0; width: 100%; max-width: 100%; height: 100vh; }
+    .szet-sor { grid-template-columns: 28px 1fr 1fr 28px; gap: 6px; }
+    .szet-sor input[type="number"] { width: 44px; }
+}
+
+@media (max-width: 480px) {
+    .loginDiv { width: 100%; margin: 16px 10px; padding: 16px; }
+    .edzes-blokk-fej { flex-wrap: wrap; }
+}

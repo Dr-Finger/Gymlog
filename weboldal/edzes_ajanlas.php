@@ -40,6 +40,12 @@ $statusSzoveg = ["pending" => "Függőben", "approved" => "Jóváhagyva", "rejec
         .admin-gombok .jovahagy { background: rgba(80,200,80,0.4); color: white; }
         .admin-gombok .elutasit { background: rgba(255,80,80,0.4); color: white; }
         .admin-gombok .torles { background: rgba(255,120,80,0.5); color: white; }
+        @media (max-width: 600px) {
+            .ajanlas-card { padding: 16px; }
+            .ajanlas-form { flex-direction: column; }
+            .ajanlas-form input { min-width: 0; }
+            .ajanlas-lista li { flex-direction: column; align-items: flex-start; }
+        }
     </style>
 </head>
 <body class="fooldal-body">

@@ -75,6 +75,15 @@
     .profil-tartalom-grid { grid-template-columns: 1fr; }
 }
 
+@media (max-width: 600px) {
+    .profil-main { margin: 16px 10px; }
+    .profil-card { padding: 16px; }
+    .fej-sor { flex-direction: column; gap: 12px; }
+    .fej-statok { flex-wrap: wrap; }
+    .naptar-grid { gap: 4px; }
+    .naptar-nap { font-size: 11px; }
+}
+
 .profil-card{
     border-radius: 24px;
     padding: 18px 20px;
@@ -350,5 +359,9 @@
     font-size: 15px;
 }
 .kalk-eredmeny { margin-top: 16px; font-size: 14px; line-height: 1.5; }
+
+@media (max-width: 480px) {
+    .popup-kalkulator { margin: 20px; max-width: calc(100% - 40px); padding: 20px; }
+}
 .profil-nem-mas { font-size: 14px; }
 .profil-nem-mas .label { font-weight: 600; margin-right: 6px; }

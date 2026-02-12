@@ -1,4 +1,5 @@
 /* Alapértelmezett háttér */
+html { overflow-x: hidden; }
 body {
     background-image: url(../img/moonlit-asteroid.jpg);
     background-attachment: fixed;
@@ -54,8 +55,8 @@ ul:not(.fooldal-body ul) li a:hover {
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-/* Oldalsó navigációs menü – csak a body közvetlen ul gyereke (nav) */
-.fooldal-body > ul {
+/* Oldalsó navigációs menü */
+.fooldal-body .main-nav .nav-menu {
     position: fixed;
     top: 0;
     left: 0;
@@ -70,11 +71,11 @@ ul:not(.fooldal-body ul) li a:hover {
     z-index: 100;
 }
 
-.fooldal-body > ul li {
+.fooldal-body .nav-menu li {
     float: none;
 }
 
-.fooldal-body > ul li a {
+.fooldal-body .nav-menu li a {
     text-align: left;
     padding: 10px 18px;
     color: white;
@@ -82,15 +83,15 @@ ul:not(.fooldal-body ul) li a:hover {
     display: block;
 }
 
-.fooldal-body > ul li a:hover {
+.fooldal-body .nav-menu li a:hover {
     background-color: rgba(255,255,255,0.1);
 }
 
-.fooldal-body > ul .home-btn-a {
+.fooldal-body .nav-menu .home-btn-a {
     padding: 0 18px 16px;
 }
 
-.fooldal-body > ul .home-btn-a:hover {
+.fooldal-body .nav-menu .home-btn-a:hover {
     background-color: transparent;
 }
 
@@ -188,19 +189,19 @@ ul:not(.fooldal-body ul) li a:hover {
     text-decoration: underline;
 }
 
-.fooldal-body > ul .nav-spacer{
+.fooldal-body .nav-menu .nav-spacer{
     flex-grow: 1;
     padding: 0 !important;
 }
 
-.fooldal-body > ul .nav-role{
+.fooldal-body .nav-menu .nav-role{
     padding: 8px 18px !important;
     font-size: 13px;
     opacity: 0.8;
     border-top: 1px solid rgba(255,255,255,0.3);
 }
 
-.fooldal-body > ul li a {
+.fooldal-body .nav-menu li a {
     font-size: 16px;
 }
 
@@ -371,4 +372,71 @@ ul:not(.fooldal-body ul) li a:hover {
 }
 .fooldal-body .vissza-link:hover {
     text-decoration: underline;
+}
+
+/* ===== HAMBURGER + RESPONSIVE ===== */
+.nav-hamburger {
+    display: none;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 101;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.4);
+    background: rgba(0,0,0,0.7);
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+.fooldal-body .main-nav {
+    position: relative;
+}
+
+.fooldal-body .main-nav .nav-menu {
+    transition: transform 0.25s ease;
+}
+
+/* Backdrop mobil menü nyitva */
+.nav-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 99;
+}
+
+.nav-backdrop.active {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .nav-hamburger { display: flex; align-items: center; justify-content: center; }
+    .fooldal-body { padding-left: 0; }
+    .fooldal-body .main-nav .nav-menu {
+        transform: translateX(-100%);
+        width: 260px;
+    }
+    .fooldal-body .main-nav .nav-menu.nav-open {
+        transform: translateX(0);
+    }
+    .fooldal-body .main-shell { margin: 20px 12px; }
+    .fooldal-body .outer-box {
+        flex-direction: column;
+        padding: 16px;
+        border-radius: 24px;
+    }
+    .fooldal-body .friends-box { width: 100%; }
+    .fooldal-body .posts-box { padding: 20px; }
+}
+
+@media (max-width: 600px) {
+    .fooldal-body .main-shell { margin: 16px 10px; }
+    .fooldal-body .terv-kartya-gombok { flex-direction: column; }
+    .fooldal-body .terv-inditas-gomb,
+    .fooldal-body .terv-torles-gomb { width: 100%; text-align: center; }
 }

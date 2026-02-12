@@ -105,3 +105,8 @@
     font-size: 13px;
     opacity: 0.8;
 }
+
+@media (max-width: 768px) {
+    .kerelm-sor { flex-wrap: wrap; gap: 10px; }
+    .kereses-form { flex-direction: column; }
+}
