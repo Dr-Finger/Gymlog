@@ -1,28 +1,78 @@
 /* ===== Profil oldal – kompakt, minimalista elrendezés ===== */
 
 .profil-main{
-    max-width: 960px;
+    max-width: 1200px;
     margin: 40px auto;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .profil-shell{
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
     box-sizing: border-box;
-    background: transparent; /* ne legyen külön, lelógó sötét csík a két oszlop mögött */
+    background: transparent;
 }
 
-.profil-left{
+.profil-fo{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+}
+
+.profil-oldal{
+    display: flex;
+    align-items: flex-start;
+}
+
+/* Fejléc – név + statok egymás mellett */
+.fej-sor {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+.fej-bal { flex: 1; min-width: 0; }
+.fej-statok {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+}
+.stat-chip {
+    padding: 10px 18px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.12);
+    font-size: 14px;
+    white-space: nowrap;
+}
+.stat-chip .stat-szam {
+    font-weight: 700;
+    margin-right: 4px;
+}
+
+/* Fő tartalom grid: Edzések | Mellék (adatok, kalk, naptár) */
+.profil-tartalom-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 20px;
+    align-items: start;
+}
+
+.profil-mellék {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-.profil-right{
-    display: flex;
-    align-items: flex-start; /* a barátok-kártya ne nyúljon le a teljes magasságig */
+.profil-edzesek-fo {
+    min-height: 200px;
+}
+
+@media (max-width: 900px) {
+    .profil-shell { grid-template-columns: 1fr; }
+    .profil-tartalom-grid { grid-template-columns: 1fr; }
 }
 
 .profil-card{
@@ -35,9 +85,10 @@
     box-sizing: border-box;
 }
 
+.profil-fejezet h1,
 .profil-basic h1{
     margin-top: 0;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     font-size: 26px;
 }
 
@@ -106,6 +157,7 @@
     text-decoration: underline;
 }
 
+.profil-statok h2,
 .profil-stats h2,
 .profil-friends h2{
     margin-top: 0;
@@ -115,7 +167,7 @@
 
 .profil-stat-grid{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
 }
 
@@ -161,3 +213,142 @@
     opacity: 0.8;
     margin: 0;
 }
+
+/* Személyes adatok űrlap */
+.profil-adatok .privát-hint { font-size: 11px; opacity: 0.7; font-weight: normal; }
+.profil-adatok-form .form-sor { margin-bottom: 10px; }
+.profil-adatok-form label { display: block; font-size: 13px; margin-bottom: 3px; }
+.profil-adatok-form input,
+.profil-adatok-form select {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.4);
+    background: rgba(0,0,0,0.3);
+    color: white;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+.profil-adatok-form .mentes-gomb-kicsi {
+    padding: 8px 16px;
+    margin-top: 4px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+}
+.profil-adatok-form .form-uzenet { font-size: 12px; margin-top: 6px; }
+
+/* Kalória kalkulátor gomb */
+.kaloria-kalkulator-gomb {
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: rgba(110, 181, 255, 0.25);
+    border: 1px solid rgba(110, 181, 255, 0.5);
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    width: 100%;
+}
+.kaloria-kalkulator-gomb:hover { background: rgba(110, 181, 255, 0.4); }
+
+/* Naptár */
+.profil-naptar h2 { margin-top: 0; }
+.profil-naptar .naptar-honap { font-size: 14px; opacity: 0.9; margin-bottom: 10px; }
+.naptar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+.naptar-nap {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+    font-size: 13px;
+}
+.naptar-nap.edzett { background: rgba(110, 181, 255, 0.4); }
+.naptar-jelmagy { font-size: 12px; opacity: 0.7; margin-top: 10px; }
+
+/* Edzések lista */
+.edzes-lista { list-style: none; padding: 0; margin: 0; }
+.edzes-lista li { border-bottom: 1px solid rgba(255,255,255,0.12); }
+.edzes-lista li:last-child { border-bottom: none; }
+.edzes-lista a {
+    display: block;
+    padding: 12px 0;
+    color: white;
+    text-decoration: none;
+}
+.edzes-lista a:hover { background: rgba(255,255,255,0.08); }
+.edzes-lista .edzes-nev { display: block; font-weight: 600; margin-bottom: 4px; }
+.edzes-lista .edzes-meta { font-size: 13px; opacity: 0.85; }
+.ures-hint { font-size: 14px; opacity: 0.85; }
+
+/* Popup */
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+}
+.popup-overlay.open { opacity: 1; visibility: visible; }
+.popup-kalkulator {
+    background: rgba(0,0,0,0.85);
+    border-radius: 20px;
+    padding: 24px 28px;
+    border: 1px solid rgba(255,255,255,0.2);
+    max-width: 380px;
+    width: 90%;
+    position: relative;
+}
+.popup-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+}
+.popup-kalkulator h2 { margin-top: 0; margin-bottom: 20px; }
+.kalkulator-form .form-sor { margin-bottom: 14px; }
+.kalkulator-form label { display: block; margin-bottom: 5px; font-size: 14px; }
+.kalkulator-form input,
+.kalkulator-form select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.4);
+    background: rgba(0,0,0,0.3);
+    color: white;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+.kalkulator-form #kalkSzamit {
+    padding: 10px 20px;
+    margin-top: 8px;
+    border-radius: 10px;
+    background: rgba(110, 181, 255, 0.3);
+    border: 1px solid rgba(110, 181, 255, 0.5);
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+.kalk-eredmeny { margin-top: 16px; font-size: 14px; line-height: 1.5; }
+.profil-nem-mas { font-size: 14px; }
+.profil-nem-mas .label { font-weight: 600; margin-right: 6px; }

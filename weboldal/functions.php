@@ -177,8 +177,18 @@ function getBaratsagAllapot($conn, $userId, $masikId) {
     return null;
 }
 
+function ensureProfilOszlopok($conn) {
+    foreach (["magassag" => "INT UNSIGNED NULL", "testsuly" => "INT UNSIGNED NULL", "nem" => "VARCHAR(20) NULL"] as $col => $def) {
+        $r = $conn->query("SHOW COLUMNS FROM felhasznalo LIKE '$col'");
+        if ($r && $r->num_rows === 0) {
+            $conn->query("ALTER TABLE felhasznalo ADD COLUMN $col $def");
+        }
+    }
+}
+
 function getFelhasznaloById($conn, $id) {
-    $stmt = $conn->prepare("SELECT id, nev, email FROM felhasznalo WHERE id = ?");
+    ensureProfilOszlopok($conn);
+    $stmt = $conn->prepare("SELECT id, nev, email, magassag, testsuly, nem FROM felhasznalo WHERE id = ?");
     if (!$stmt) return null;
     $stmt->bind_param("i", $id);
     $stmt->execute();
@@ -187,6 +197,8 @@ function getFelhasznaloById($conn, $id) {
 
 function getProfilStat($conn, $userId, $tipus) {
     if ($tipus === 'edzes') {
+        $check = $conn->query("SHOW TABLES LIKE 'edzes'");
+        if (!$check || $check->num_rows === 0) return 0;
         $r = $conn->query("SELECT COUNT(*) as c FROM edzes WHERE felhasznaloId = " . (int)$userId);
         return $r ? (int)$r->fetch_assoc()["c"] : 0;
     }
@@ -194,6 +206,35 @@ function getProfilStat($conn, $userId, $tipus) {
         return count(getBaratok($conn, $userId));
     }
     return 0;
+}
+
+function getProfilEdzesek($conn, $userId, $limit = 50) {
+    $edzesek = [];
+    $check = $conn->query("SHOW TABLES LIKE 'edzes'");
+    if (!$check || $check->num_rows === 0) return $edzesek;
+    $stmt = $conn->prepare("SELECT id, nev, datum, idotartam, osszsuly FROM edzes WHERE felhasznaloId = ? ORDER BY datum DESC, id DESC LIMIT ?");
+    if (!$stmt) return $edzesek;
+    $l = (int)$limit;
+    $stmt->bind_param("ii", $userId, $l);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while ($row = $res->fetch_assoc()) $edzesek[] = $row;
+    return $edzesek;
+}
+
+function getEdzesNapokHonap($conn, $userId) {
+    $napok = [];
+    $check = $conn->query("SHOW TABLES LIKE 'edzes'");
+    if (!$check || $check->num_rows === 0) return $napok;
+    $honapStart = date("Y-m-01", strtotime("-1 month"));
+    $honapEnd = date("Y-m-t", strtotime("-1 month"));
+    $stmt = $conn->prepare("SELECT DISTINCT DATE(datum) as nap FROM edzes WHERE felhasznaloId = ? AND datum >= ? AND datum <= ?");
+    if (!$stmt) return $napok;
+    $stmt->bind_param("iss", $userId, $honapStart, $honapEnd);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while ($row = $res->fetch_assoc()) $napok[] = $row["nap"];
+    return $napok;
 }
 
 function formatGyakorlatReszletek($sor) {
