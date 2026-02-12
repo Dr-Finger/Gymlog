@@ -25,6 +25,8 @@ $verifyOk = password_verify($jelszo, $user["jelszo"]);
 
 if ($user && password_verify($jelszo, $user["jelszo"])) {
     $_SESSION["user_id"] = $user["id"];
+    $_SESSION["nev"] = $user["nev"];
+    $_SESSION["role"] = !empty($user["admin"]) ? "admin" : "felhasznalo";
     header("Location: index.php");
     exit;
 }

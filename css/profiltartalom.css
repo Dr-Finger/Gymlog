@@ -55,6 +55,57 @@
     opacity: 0.9;
 }
 
+.profil-basic .vendeg-uzenet{
+    margin-bottom: 16px;
+}
+.profil-basic a.gomb{
+    display: inline-block;
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+}
+.profil-basic a.gomb:hover{
+    background: rgba(255,255,255,0.3);
+}
+
+.barat-jonelol-gomb {
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.barat-jonelol-gomb:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.barat-status {
+    opacity: 0.9;
+    font-style: italic;
+}
+
+.profil-friends ul.friends-list a {
+    color: #6eb5ff;
+    text-decoration: none;
+}
+.profil-friends ul.friends-list a:hover {
+    text-decoration: underline;
+}
+
+.vissza-kozosseg {
+    color: #6eb5ff;
+    text-decoration: none;
+    font-size: 14px;
+}
+.vissza-kozosseg:hover {
+    text-decoration: underline;
+}
+
 .profil-stats h2,
 .profil-friends h2{
     margin-top: 0;

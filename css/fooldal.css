@@ -54,8 +54,8 @@ ul:not(.fooldal-body ul) li a:hover {
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-/* Oldalsó navigációs menü */
-.fooldal-body ul {
+/* Oldalsó navigációs menü – csak a body közvetlen ul gyereke (nav) */
+.fooldal-body > ul {
     position: fixed;
     top: 0;
     left: 0;
@@ -67,13 +67,14 @@ ul:not(.fooldal-body ul) li a:hover {
     list-style: none;
     margin: 0;
     padding: 0;
+    z-index: 100;
 }
 
-.fooldal-body ul li {
+.fooldal-body > ul li {
     float: none;
 }
 
-.fooldal-body ul li a {
+.fooldal-body > ul li a {
     text-align: left;
     padding: 10px 18px;
     color: white;
@@ -81,11 +82,11 @@ ul:not(.fooldal-body ul) li a:hover {
     display: block;
 }
 
-.fooldal-body ul li a:hover {
+.fooldal-body > ul li a:hover {
     background-color: rgba(255,255,255,0.1);
 }
 
-.fooldal-body .home-btn-a {
+.fooldal-body > ul .home-btn-a {
     padding: 0 18px 16px;
 }
 
@@ -141,19 +142,35 @@ ul:not(.fooldal-body ul) li a:hover {
     line-height: 1.4;
 }
 
-.fooldal-body .nav-spacer{
+.fooldal-body .friends-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.fooldal-body .friends-lista li {
+    margin-bottom: 8px;
+}
+.fooldal-body .friends-lista a {
+    color: #6eb5ff;
+    text-decoration: none;
+}
+.fooldal-body .friends-lista a:hover {
+    text-decoration: underline;
+}
+
+.fooldal-body > ul .nav-spacer{
     flex-grow: 1;
     padding: 0 !important;
 }
 
-.fooldal-body .nav-role{
+.fooldal-body > ul .nav-role{
     padding: 8px 18px !important;
     font-size: 13px;
     opacity: 0.8;
     border-top: 1px solid rgba(255,255,255,0.3);
 }
 
-.fooldal-body ul li a {
+.fooldal-body > ul li a {
     font-size: 16px;
 }
 
@@ -211,4 +228,95 @@ ul:not(.fooldal-body ul) li a:hover {
     background: rgba(255,255,255,0.25);
     border-color: rgba(255,255,255,0.4);
     transform: translateY(-1px);
+}
+
+.fooldal-body .auth-link-inline{
+    color: #6eb5ff;
+    text-decoration: none;
+}
+.fooldal-body .auth-link-inline:hover{
+    text-decoration: underline;
+}
+
+.fooldal-body .poszt-kartya{
+    background: rgba(0,0,0,0.5);
+    border-radius: 15px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.fooldal-body .poszt-tartalom{
+    margin: 0 0 8px 0;
+    font-size: 15px;
+}
+.fooldal-body .poszt-datum{
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.fooldal-body .poszt-kartya.poszt-kattinthato {
+    cursor: pointer;
+}
+.fooldal-body .poszt-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+.fooldal-body .poszt-link:hover {
+    opacity: 1;
+}
+.fooldal-body .poszt-reszlet-hint {
+    font-size: 12px;
+    opacity: 0.7;
+    display: block;
+    margin-top: 6px;
+}
+
+.fooldal-body .edzes-reszlet-kartya {
+    background: rgba(0,0,0,0.5);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+.fooldal-body .edzes-reszlet-kartya h1 {
+    margin: 0 0 12px 0;
+    font-size: 26px;
+}
+.fooldal-body .edzes-meta-reszlet {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-bottom: 20px;
+}
+.fooldal-body .edzes-reszlet-kartya h2 {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+}
+.fooldal-body .reszlet-lista {
+    margin-bottom: 20px;
+}
+.fooldal-body .mentes-tervkent-gomb {
+    padding: 12px 24px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+.fooldal-body .mentes-tervkent-gomb:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+.fooldal-body .mentes-tervkent-gomb:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.fooldal-body .vissza-link {
+    color: #6eb5ff;
+    text-decoration: none;
+}
+.fooldal-body .vissza-link:hover {
+    text-decoration: underline;
 }

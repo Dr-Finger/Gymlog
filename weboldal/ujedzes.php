@@ -27,6 +27,9 @@ if (isset($_GET["terv_id"]) && is_numeric($_GET["terv_id"])) {
         window.tervAdatok = <?php echo json_encode($tervAdatok, JSON_UNESCAPED_UNICODE); ?>;
     </script>
     <?php endif; ?>
+    <script>
+        window.vendeg = <?php echo isset($_SESSION["user_id"]) ? "false" : "true"; ?>;
+    </script>
     <title>Új edzés</title>
 </head>
 <body class="fooldal-body">
@@ -42,6 +45,12 @@ if (isset($_GET["terv_id"]) && is_numeric($_GET["terv_id"])) {
 
         <div class="edzes-meta">
             <span id="gyakorlatCount">0 gyakorlat</span>
+            <span id="idotartamKijelzo" class="idotartam-kijelzo">00:00</span>
+        </div>
+
+        <div class="edzes-vezerlo">
+            <button type="button" id="inditGomb" class="indit-gomb">Indít</button>
+            <button type="button" id="befejezGomb" class="befejez-gomb" disabled>Befejez</button>
         </div>
 
         <div id="valasztottGyakorlatok" class="gyakorlat-lista">
@@ -50,8 +59,10 @@ if (isset($_GET["terv_id"]) && is_numeric($_GET["terv_id"])) {
 
         <button type="button" id="ujGyakorlatGomb">Gyakorlat hozzáadása</button>
 
-        <button type="button" id="mentes" class="mentes-gomb">Edzés mentése</button>
-
+        <button type="button" id="mentes" class="mentes-gomb">Edzés mentése (tervként)</button>
+        <?php if (!isset($_SESSION["user_id"])): ?>
+        <p class="vendeg-hint">A mentéshez <a href="login-html.php">jelentkezz be</a>.</p>
+        <?php endif; ?>
         <p id="hiba"></p>
     </div>
 

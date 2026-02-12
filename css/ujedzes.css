@@ -23,6 +23,18 @@
     gap: 10px;
 }
 
+.vendeg-hint {
+    font-size: 13px;
+    opacity: 0.9;
+}
+.vendeg-hint a {
+    color: #6eb5ff;
+    text-decoration: none;
+}
+.vendeg-hint a:hover {
+    text-decoration: underline;
+}
+
 .loginDiv h1 {
     font-size: 32px;
     margin: 0 0 6px;
@@ -71,6 +83,55 @@
     margin-top: 6px;
     font-size: 14px;
     opacity: 0.85;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.idotartam-kijelzo {
+    font-size: 24px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.edzes-vezerlo {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.indit-gomb, .befejez-gomb {
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.indit-gomb {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.indit-gomb:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.befejez-gomb {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: white;
+}
+
+.befejez-gomb:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.befejez-gomb:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* Választott gyakorlatok listája */

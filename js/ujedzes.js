@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Elemek lekérése
     const elemek = {
         ujGyakGomb: document.getElementById("ujGyakorlatGomb"),
         panel: document.getElementById("gyakorlatPanel"),
@@ -9,12 +8,45 @@ document.addEventListener("DOMContentLoaded", () => {
         valasztottWrap: document.getElementById("valasztottGyakorlatok"),
         hiba: document.getElementById("hiba"),
         gyCount: document.getElementById("gyakorlatCount"),
-        mentesGomb: document.getElementById("mentes")
+        mentesGomb: document.getElementById("mentes"),
+        inditGomb: document.getElementById("inditGomb"),
+        befejezGomb: document.getElementById("befejezGomb"),
+        idotartamKijelzo: document.getElementById("idotartamKijelzo")
     };
 
-    // Ellenőrzés, hogy minden elem létezik
     if (Object.values(elemek).some(e => !e)) {
         return;
+    }
+
+    // Számláló / timer
+    let timerInterval = null;
+    let elteltMasodperc = 0;
+
+    function formatIdo(mp) {
+        const m = Math.floor(mp / 60);
+        const s = mp % 60;
+        return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+    }
+
+    function timerIndit() {
+        if (timerInterval) return;
+        elteltMasodperc = 0;
+        elemek.idotartamKijelzo.textContent = formatIdo(0);
+        timerInterval = setInterval(() => {
+            elteltMasodperc++;
+            elemek.idotartamKijelzo.textContent = formatIdo(elteltMasodperc);
+        }, 1000);
+        elemek.inditGomb.disabled = true;
+        elemek.befejezGomb.disabled = false;
+    }
+
+    function timerLeallit() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+        elemek.inditGomb.disabled = false;
+        elemek.befejezGomb.disabled = true;
     }
 
     // Gyakorlat számláló frissítése
@@ -93,9 +125,83 @@ document.addEventListener("DOMContentLoaded", () => {
         }));
     }
 
-    // Mentés
+    // Indít gomb
+    elemek.inditGomb.addEventListener("click", () => {
+        const sorok = sorokOsszegyujtese();
+        if (sorok.length === 0) {
+            elemek.hiba.style.color = "red";
+            elemek.hiba.textContent = "Adj hozzá legalább egy gyakorlatot az indításhoz!";
+            return;
+        }
+        const edzesNev = document.getElementById("edzesNev")?.value.trim() || "";
+        if (!edzesNev) {
+            elemek.hiba.style.color = "red";
+            elemek.hiba.textContent = "Adj nevet az edzésnek!";
+            return;
+        }
+        elemek.hiba.textContent = "";
+        timerIndit();
+    });
+
+    // Befejez gomb
+    elemek.befejezGomb.addEventListener("click", async () => {
+        if (window.vendeg) {
+            elemek.hiba.style.color = "red";
+            elemek.hiba.textContent = "Jelentkezz be a befejezéshez.";
+            return;
+        }
+
+        const sorok = sorokOsszegyujtese();
+        if (sorok.length === 0) {
+            elemek.hiba.style.color = "red";
+            elemek.hiba.textContent = "Adj hozzá legalább egy gyakorlatot!";
+            return;
+        }
+        const edzesNev = document.getElementById("edzesNev")?.value.trim() || "";
+        if (!edzesNev) {
+            elemek.hiba.style.color = "red";
+            elemek.hiba.textContent = "Adj nevet az edzésnek!";
+            return;
+        }
+
+        timerLeallit();
+
+        try {
+            elemek.hiba.style.color = "white";
+            elemek.hiba.textContent = "Mentés...";
+
+            const response = await fetch("ujedzes_befejez.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    nev: edzesNev,
+                    sorok: sorok,
+                    idotartam: elteltMasodperc
+                })
+            });
+
+            const data = await response.json();
+
+            if (data?.siker && data?.redirect) {
+                window.location.href = data.redirect;
+            } else {
+                elemek.hiba.style.color = "red";
+                elemek.hiba.textContent = data?.uzenet || "Hiba történt.";
+            }
+        } catch (e) {
+            elemek.hiba.style.color = "red";
+            elemek.hiba.textContent = "Nem sikerült kapcsolódni a szerverhez.";
+        }
+    });
+
+    // Mentés (tervként)
     elemek.mentesGomb.addEventListener("click", async () => {
         elemek.hiba.style.color = "red";
+
+        if (window.vendeg) {
+            elemek.hiba.textContent = "A mentéshez jelentkezz be.";
+            return;
+        }
 
         const sorok = sorokOsszegyujtese();
         if (sorok.length === 0) {

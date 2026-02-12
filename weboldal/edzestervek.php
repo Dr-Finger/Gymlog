@@ -3,13 +3,9 @@ session_start();
 require "db.php";
 require "functions.php";
 
-if (!isset($_SESSION["user_id"])) {
-    header("Location: login-html.php");
-    exit;
-}
-
-$userId = (int)$_SESSION["user_id"];
-$tervek = getTervek($conn, $userId);
+$bejelentkezve = isset($_SESSION["user_id"]);
+$userId = $bejelentkezve ? (int)$_SESSION["user_id"] : 0;
+$tervek = $bejelentkezve ? getTervek($conn, $userId) : [];
 ?>
 <!DOCTYPE html>
 <html lang="hu">
@@ -29,7 +25,12 @@ $tervek = getTervek($conn, $userId);
             <section class="posts-box">
                 <h1>Mentett edzéstervek</h1>
 
-                <?php if (empty($tervek)): ?>
+                <?php if (!$bejelentkezve): ?>
+                    <p class="posts-placeholder">
+                        Jelentkezz be az edzéstervek megtekintéséhez és mentéséhez.
+                        <br><a href="login-html.php" class="auth-link-inline">Bejelentkezés</a>
+                    </p>
+                <?php elseif (empty($tervek)): ?>
                     <p class="posts-placeholder">
                         Még nincs elmentett edzésterved. Hozz létre egyet az „Új edzés” fülön, majd kattints az „Edzés mentése” gombra.
                     </p>
