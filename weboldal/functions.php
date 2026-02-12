@@ -45,7 +45,7 @@ function getTervek($conn, $userId) {
     return $tervek;
 }
 
-function getPosztok($conn, $limit = 50) {
+function getPosztok($conn, $limit = 50, $userId = null, $csakBaratok = false) {
     $posztok = [];
     $check = $conn->query("SHOW TABLES LIKE 'poszt'");
     if (!$check || $check->num_rows === 0) {
@@ -59,10 +59,39 @@ function getPosztok($conn, $limit = 50) {
     $sel = $hasEdzesId 
         ? "SELECT p.id, p.tartalom, p.datum, p.felhasznaloId, p.edzesId, f.nev as felhasznaloNev"
         : "SELECT p.id, p.tartalom, p.datum, p.felhasznaloId, NULL as edzesId, f.nev as felhasznaloNev";
-    $res = $conn->query($sel . " FROM poszt p JOIN felhasznalo f ON f.id = p.felhasznaloId ORDER BY p.datum DESC LIMIT " . (int)$limit);
-    if ($res) {
-        while ($row = $res->fetch_assoc()) {
-            $posztok[] = $row;
+    $where = "";
+    $types = "";
+    $params = [];
+    if ($csakBaratok && $userId !== null) {
+        $baratok = getBaratok($conn, (int)$userId);
+        $engedelyezettIds = [(int)$userId];
+        foreach ($baratok as $b) {
+            $engedelyezettIds[] = (int)$b["id"];
+        }
+        $placeholders = implode(",", array_fill(0, count($engedelyezettIds), "?"));
+        $where = " WHERE p.felhasznaloId IN (" . $placeholders . ")";
+        $types = str_repeat("i", count($engedelyezettIds));
+        $params = $engedelyezettIds;
+    }
+    $limitVal = (int)$limit;
+    if (!empty($params)) {
+        $stmt = $conn->prepare($sel . " FROM poszt p JOIN felhasznalo f ON f.id = p.felhasznaloId" . $where . " ORDER BY p.datum DESC LIMIT ?");
+        if ($stmt) {
+            $params[] = $limitVal;
+            $types .= "i";
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
+            $res = $stmt->get_result();
+            while ($row = $res->fetch_assoc()) {
+                $posztok[] = $row;
+            }
+        }
+    } else {
+        $res = $conn->query($sel . " FROM poszt p JOIN felhasznalo f ON f.id = p.felhasznaloId" . $where . " ORDER BY p.datum DESC LIMIT " . $limitVal);
+        if ($res) {
+            while ($row = $res->fetch_assoc()) {
+                $posztok[] = $row;
+            }
         }
     }
     return $posztok;
