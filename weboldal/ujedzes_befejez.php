@@ -54,15 +54,6 @@ if (!$stmt->execute()) {
 
 $edzesId = (int)$conn->insert_id;
 
-// Poszt tábla létrehozása (ha nincs), vagy edzesId oszlop hozzáadása
-$conn->query("CREATE TABLE IF NOT EXISTS poszt (
-    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    felhasznaloId INT(11) NOT NULL,
-    tartalom VARCHAR(500) NOT NULL,
-    datum DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    edzesId INT(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
 // Poszt létrehozása – név az adatbázisból
 $nevStmt = $conn->prepare("SELECT nev FROM felhasznalo WHERE id = ?");
 $nevStmt->bind_param("i", $userId);

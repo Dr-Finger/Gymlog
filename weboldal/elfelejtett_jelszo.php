@@ -9,15 +9,15 @@ session_start();
     <link rel="stylesheet" href="../css/fooldal.css">
     <link rel="stylesheet" href="../css/login.css">
     <link rel="icon" type="image/x-icon" href="../img/gymlog-white.png">
-    <script src="../js/bejelentkezes.js" defer></script>
-    <title>Bejelentkezés</title>
+    <title>Elfelejtett jelszó</title>
 </head>
 <body class="fooldal-body">
     <?php include "nav.php"; ?>
 
     <main class="auth-main">
         <div class="auth-card">
-            <h1>Bejelentkezés</h1>
+            <h1>Elfelejtett jelszó</h1>
+            <p class="auth-info">Add meg a regisztrációhoz használt e-mail címedet. E-mailben elküldjük a jelszó-visszaállító linket.</p>
 
             <?php if (!empty($_SESSION["hiba"])): ?>
                 <p class="auth-error">
@@ -28,20 +28,14 @@ session_start();
                 </p>
             <?php endif; ?>
 
-            <form action="login.php" method="post" class="auth-form">
+            <form action="jelszo_reset_kuldes.php" method="post" class="auth-form">
                 <label>
                     E-mail
-                    <input type="email" name="email" id="email" placeholder="E-mail" required>
+                    <input type="email" name="email" placeholder="E-mail cím" required autofocus>
                 </label>
-                <label>
-                    Jelszó
-                    <input type="password" name="jelszo" id="jelszo" placeholder="Jelszó" required>
-                </label>
-                <span class="mutasdajelszot" id="mutasd">Mutasd a jelszót</span>
-                <a href="elfelejtett_jelszo.php" class="elfelejtett-link">Elfelejtetted a jelszót?</a>
                 <div class="gombSor">
-                    <button type="submit">Bejelentkezés</button>
-                    <a href="register-html.php" class="gomb">Regisztráció</a>
+                    <button type="submit">Link kérése</button>
+                    <a href="login-html.php" class="gomb">Vissza</a>
                 </div>
             </form>
         </div>

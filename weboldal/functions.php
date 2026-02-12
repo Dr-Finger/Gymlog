@@ -97,18 +97,7 @@ function getPosztok($conn, $limit = 50, $userId = null, $csakBaratok = false) {
     return $posztok;
 }
 
-function ensureGyakorlatAjanlasTable($conn) {
-    $conn->query("CREATE TABLE IF NOT EXISTS gyakorlat_ajanlas (
-        id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        felhasznalo_id INT(11) NOT NULL,
-        nev VARCHAR(100) NOT NULL,
-        status ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending',
-        datum DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-}
-
 function gyakorlatAjanlasBeszuras($conn, $userId, $nev) {
-    ensureGyakorlatAjanlasTable($conn);
     $stmt = $conn->prepare("INSERT INTO gyakorlat_ajanlas (felhasznalo_id, nev) VALUES (?, ?)");
     if (!$stmt) return false;
     $stmt->bind_param("is", $userId, $nev);
@@ -186,17 +175,6 @@ function getOsszesGyakorlat($conn) {
     return $osszes;
 }
 
-function ensureBaratsagTable($conn) {
-    $conn->query("CREATE TABLE IF NOT EXISTS baratsag (
-        id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        kero_id INT(11) NOT NULL,
-        fogado_id INT(11) NOT NULL,
-        status ENUM('pending','accepted') NOT NULL DEFAULT 'pending',
-        datum DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE KEY uq_keres (kero_id, fogado_id)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-}
-
 function getFelhasznalok($conn, $userId, $keres = "") {
     $felhasznalok = [];
     $keres = trim($keres);
@@ -266,17 +244,7 @@ function getBaratsagAllapot($conn, $userId, $masikId) {
     return null;
 }
 
-function ensureProfilOszlopok($conn) {
-    foreach (["magassag" => "INT UNSIGNED NULL", "testsuly" => "INT UNSIGNED NULL", "nem" => "VARCHAR(20) NULL"] as $col => $def) {
-        $r = $conn->query("SHOW COLUMNS FROM felhasznalo LIKE '$col'");
-        if ($r && $r->num_rows === 0) {
-            $conn->query("ALTER TABLE felhasznalo ADD COLUMN $col $def");
-        }
-    }
-}
-
 function getFelhasznaloById($conn, $id) {
-    ensureProfilOszlopok($conn);
     $stmt = $conn->prepare("SELECT id, nev, email, magassag, testsuly, nem FROM felhasznalo WHERE id = ?");
     if (!$stmt) return null;
     $stmt->bind_param("i", $id);

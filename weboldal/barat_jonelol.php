@@ -29,7 +29,6 @@ if ($keroId === $fogadoId) {
     exit;
 }
 
-ensureBaratsagTable($conn);
 $allapot = getBaratsagAllapot($conn, $keroId, $fogadoId);
 
 if ($allapot) {

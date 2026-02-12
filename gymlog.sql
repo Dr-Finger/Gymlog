@@ -20,6 +20,10 @@ SET time_zone = "+00:00";
 --
 -- Database: `gymlog`
 --
+-- Használat: phpMyAdmin-ban válaszd ki a gymlog adatbázist, majd importáld ezt a fájlt.
+-- Új telepítésnél először hozd létre az üres gymlog adatbázist.
+-- Meglévő adatbázis frissítéséhez futtasd külön az új táblák CREATE TABLE részét.
+--
 
 -- --------------------------------------------------------
 
@@ -86,9 +90,12 @@ CREATE TABLE `edzestervgyakorlat` (
 CREATE TABLE `felhasznalo` (
   `id` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `nev` varchar(20) NOT NULL,
-  `jelszo` varchar(20) NOT NULL,
-  `admin` tinyint(1) NOT NULL DEFAULT 0
+  `nev` varchar(50) NOT NULL,
+  `jelszo` varchar(255) NOT NULL,
+  `admin` tinyint(1) NOT NULL DEFAULT 0,
+  `magassag` int(10) UNSIGNED DEFAULT NULL,
+  `testsuly` int(10) UNSIGNED DEFAULT NULL,
+  `nem` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -132,6 +139,91 @@ CREATE TABLE `sorozat` (
   `gyakorlatId` int(11) NOT NULL,
   `ismertles` int(11) NOT NULL,
   `suly` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jelszo_reset`
+--
+
+CREATE TABLE `jelszo_reset` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(64) NOT NULL,
+  `felhasznalo_id` int(11) NOT NULL,
+  `lejarat` datetime NOT NULL,
+  `hasznalva` tinyint(1) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `token` (`token`),
+  KEY `idx_token` (`token`),
+  KEY `idx_lejarat` (`lejarat`),
+  KEY `felhasznalo_id` (`felhasznalo_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gyakorlat_ajanlas`
+--
+
+CREATE TABLE `gyakorlat_ajanlas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `felhasznalo_id` int(11) NOT NULL,
+  `nev` varchar(100) NOT NULL,
+  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  `datum` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `felhasznalo_id` (`felhasznalo_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `baratsag`
+--
+
+CREATE TABLE `baratsag` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `kero_id` int(11) NOT NULL,
+  `fogado_id` int(11) NOT NULL,
+  `status` enum('pending','accepted') NOT NULL DEFAULT 'pending',
+  `datum` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_keres` (`kero_id`,`fogado_id`),
+  KEY `fogado_id` (`fogado_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `poszt`
+--
+
+CREATE TABLE `poszt` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `felhasznaloId` int(11) NOT NULL,
+  `tartalom` varchar(500) NOT NULL,
+  `datum` datetime NOT NULL DEFAULT current_timestamp(),
+  `edzesId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `felhasznaloId` (`felhasznaloId`),
+  KEY `edzesId` (`edzesId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `edzesterv_mentes`
+--
+
+CREATE TABLE `edzesterv_mentes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `felhasznaloId` int(11) NOT NULL,
+  `nev` varchar(100) NOT NULL,
+  `tartalom` longtext NOT NULL,
+  `letrehozva` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `felhasznaloId` (`felhasznaloId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -288,6 +380,38 @@ ALTER TABLE `gyakorlathozzaad`
 ALTER TABLE `sorozat`
   ADD CONSTRAINT `sorozat_ibfk_1` FOREIGN KEY (`edzesId`) REFERENCES `edzes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `sorozat_ibfk_2` FOREIGN KEY (`gyakorlatId`) REFERENCES `gyakorlat` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `jelszo_reset`
+--
+ALTER TABLE `jelszo_reset`
+  ADD CONSTRAINT `jelszo_reset_ibfk_1` FOREIGN KEY (`felhasznalo_id`) REFERENCES `felhasznalo` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `gyakorlat_ajanlas`
+--
+ALTER TABLE `gyakorlat_ajanlas`
+  ADD CONSTRAINT `gyakorlat_ajanlas_ibfk_1` FOREIGN KEY (`felhasznalo_id`) REFERENCES `felhasznalo` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `baratsag`
+--
+ALTER TABLE `baratsag`
+  ADD CONSTRAINT `baratsag_ibfk_1` FOREIGN KEY (`kero_id`) REFERENCES `felhasznalo` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `baratsag_ibfk_2` FOREIGN KEY (`fogado_id`) REFERENCES `felhasznalo` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `poszt`
+--
+ALTER TABLE `poszt`
+  ADD CONSTRAINT `poszt_ibfk_1` FOREIGN KEY (`felhasznaloId`) REFERENCES `felhasznalo` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `poszt_ibfk_2` FOREIGN KEY (`edzesId`) REFERENCES `edzes` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `edzesterv_mentes`
+--
+ALTER TABLE `edzesterv_mentes`
+  ADD CONSTRAINT `edzesterv_mentes_ibfk_1` FOREIGN KEY (`felhasznaloId`) REFERENCES `felhasznalo` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

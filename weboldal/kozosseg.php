@@ -10,7 +10,6 @@ $felhasznalok = [];
 $baratiKerelmek = [];
 
 if ($bejelentkezve) {
-    ensureBaratsagTable($conn);
     $felhasznalok = getFelhasznalok($conn, $userId, $keres);
     $baratiKerelmek = getBaratiKerelmek($conn, $userId);
 }

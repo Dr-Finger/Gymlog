@@ -46,14 +46,6 @@ if (!is_array($check) || empty($check)) {
     exit;
 }
 
-$conn->query("CREATE TABLE IF NOT EXISTS edzesterv_mentes (
-    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    felhasznaloId INT(11) NOT NULL,
-    nev VARCHAR(100) NOT NULL,
-    tartalom LONGTEXT NOT NULL,
-    letrehozva DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
-
 $userId = (int)$_SESSION["user_id"];
 $pstmt = $conn->prepare("INSERT INTO edzesterv_mentes (felhasznaloId, nev, tartalom) VALUES (?, ?, ?)");
 $pstmt->bind_param("iss", $userId, $nev, $tartalom);

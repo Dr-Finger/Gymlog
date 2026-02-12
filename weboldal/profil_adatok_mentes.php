@@ -31,7 +31,6 @@ if ($nem !== null && !in_array($nem, ["ferfi", "no", "mas"])) {
     exit;
 }
 
-ensureProfilOszlopok($conn);
 $userId = (int)$_SESSION["user_id"];
 $m = $magassag ?? -1;
 $t = $testsuly ?? -1;

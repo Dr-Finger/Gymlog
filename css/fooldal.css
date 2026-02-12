@@ -88,6 +88,8 @@ ul:not(.fooldal-body ul) li a:hover {
 }
 
 .fooldal-body .nav-menu .home-btn-a {
+    display: inline-flex;
+    width: fit-content;
     padding: 0 18px 16px;
 }
 
