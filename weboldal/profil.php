@@ -35,7 +35,7 @@ if (preg_match('/^\d{4}-\d{2}$/', $honapParam)) {
     }
 }
 if (!$valasztottHonap) {
-    $valasztottHonap = date("Y-m", strtotime("-1 month"));
+    $valasztottHonap = date("Y-m");
 }
 
 if ($profilUser) {
