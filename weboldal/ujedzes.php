@@ -46,7 +46,7 @@ if (isset($_GET["terv_id"]) && is_numeric($_GET["terv_id"])) {
 
         <div class="edzes-meta">
             <span id="gyakorlatCount">0 gyakorlat</span>
-            <span id="idotartamKijelzo" class="idotartam-kijelzo">00:00</span>
+            <span id="idotartamKijelzo" class="idotartam-kijelzo">0:00:00</span>
         </div>
 
         <div class="edzes-vezerlo">

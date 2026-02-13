@@ -1,4 +1,4 @@
-/* Alapértelmezett háttér */
+    /* Alapértelmezett háttér */
 html { overflow-x: hidden; }
 body {
     background-image: url(../img/moonlit-asteroid.jpg);
@@ -380,7 +380,7 @@ ul:not(.fooldal-body ul) li a:hover {
 .nav-hamburger {
     display: none;
     position: fixed;
-    top: 12px;
+    top: 2vw;
     left: 12px;
     z-index: 101;
     width: 44px;
@@ -417,6 +417,10 @@ ul:not(.fooldal-body ul) li a:hover {
 }
 
 @media (max-width: 768px) {
+    .home-btn {
+        padding-left: 25vw;
+        padding-top: 1.7vw;
+    }
     .nav-hamburger { display: flex; align-items: center; justify-content: center; }
     .fooldal-body { padding-left: 0; }
     .fooldal-body .main-nav .nav-menu {
