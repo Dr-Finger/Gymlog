@@ -18,11 +18,6 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-
-$hashPrefix = substr($user["jelszo"], 0, 4); // pl. $2y$
-$verifyOk = password_verify($jelszo, $user["jelszo"]);
-
-
 if ($user && password_verify($jelszo, $user["jelszo"])) {
     $_SESSION["user_id"] = $user["id"];
     $_SESSION["nev"] = $user["nev"];

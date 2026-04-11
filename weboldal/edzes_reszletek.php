@@ -157,7 +157,7 @@ if ($posztSor) {
                 const data = await response.json();
 
                 if (data.siker) {
-                    uzenet.style.color = "red";
+                    uzenet.style.color = "green";
                     uzenet.textContent = data.uzenet || "Edzésterv sikeresen mentve!";
                 } else {
                     uzenet.style.color = "red";

@@ -24,9 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let startTime = null;
 
     function formatIdo(mp) {
-        const m = Math.floor(mp / 60);
+        const h = Math.floor(mp / 3600);
+        const m = Math.floor((mp % 3600) / 60);
         const s = mp % 60;
-        return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+        return h + ":" + String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
     }
 
     function getStartTime() {

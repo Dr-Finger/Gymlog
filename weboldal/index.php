@@ -21,7 +21,7 @@ if (isset($_SESSION["user_id"])) {
     <link rel="icon" type="image/x-icon" href="../img/gymlog-white.png">
     <script src="../js/index.js" defer></script>
 
-    <title>Bejelentkezés</title>
+    <title>Bejegyzések</title>
 </head>
 <body class="fooldal-body">
     <?php include "nav.php"; ?>

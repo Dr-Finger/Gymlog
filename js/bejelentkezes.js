@@ -1,24 +1,29 @@
-let jelszo = document.getElementById("jelszo");
-let mutasd = document.getElementById("mutasd");
+const jelszo = document.getElementById("jelszo");
+const mutasd = document.getElementById("mutasd");
 
-mutasd.addEventListener("mouseover", function(){
-    jelszo.type = "text";
-    mutasd.style.color = "lightblue";
-})
-mutasd.addEventListener("mouseout", function(){
-    jelszo.type = "password";
-    mutasd.style.color = "white";
-})
+if (mutasd && jelszo) {
+    mutasd.addEventListener("mouseover", function () {
+        jelszo.type = "text";
+        mutasd.style.color = "lightblue";
+    });
+    mutasd.addEventListener("mouseout", function () {
+        jelszo.type = "password";
+        mutasd.style.color = "white";
+    });
+}
 
-let email = document.getElementById("email");
-let login = document.getElementById("login");
-let hiba = document.getElementById("hiba");
+const email = document.getElementById("email");
+const form = document.querySelector(".auth-form");
+const hibaEl = document.getElementById("hiba");
 
-login.addEventListener("click", function(){
-    if (email.value.trim() === "" || jelszo.value.trim() === "" ){
-        hiba.innerText = "Minden mezőt töltsön ki!";
-    }
-    else{
-        hiba.innerText = "";
-    }
-})
+if (form) {
+    form.addEventListener("submit", function (e) {
+        if (!email || !jelszo) return;
+        if (email.value.trim() === "" || jelszo.value.trim() === "") {
+            e.preventDefault();
+            if (hibaEl) hibaEl.innerText = "Minden mezőt töltsön ki!";
+        } else {
+            if (hibaEl) hibaEl.innerText = "";
+        }
+    });
+}

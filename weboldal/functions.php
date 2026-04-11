@@ -122,7 +122,7 @@ function felhasznalokLekeres($conn, $kijelentkezettId, $keres) {
 
 function baratokLekeres($conn, $felhasznaloId) {
     $lista = [];
-    $lekerdezes = $conn->prepare("SELECT f.id, f.nev FROM baratsag b JOIN felhasznalo f ON (f.id = b.kero_id OR f.id = b.fogado_id) AND f.id != ? WHERE (b.kero_id = ? OR b.fogado_id = ?) AND b.status = 'accepted' ORDER BY f.nev");
+    $lekerdezes = $conn->prepare("SELECT DISTINCT f.id, f.nev FROM baratsag b JOIN felhasznalo f ON (f.id = b.kero_id OR f.id = b.fogado_id) AND f.id != ? WHERE (b.kero_id = ? OR b.fogado_id = ?) AND b.status = 'accepted' ORDER BY f.nev");
     $lekerdezes->bind_param("iii", $felhasznaloId, $felhasznaloId, $felhasznaloId);
     $lekerdezes->execute();
     $eredmeny = $lekerdezes->get_result();

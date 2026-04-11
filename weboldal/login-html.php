@@ -38,6 +38,7 @@ session_start();
                     <input type="password" name="jelszo" id="jelszo" placeholder="Jelszó" required>
                 </label>
                 <span class="mutasdajelszot" id="mutasd">Mutasd a jelszót</span>
+                <p id="hiba" class="auth-error"></p>
                 <div class="gombSor">
                     <button type="submit">Bejelentkezés</button>
                     <a href="register-html.php" class="gomb">Regisztráció</a>
